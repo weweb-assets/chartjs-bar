@@ -1,7 +1,7 @@
 <template>
     <div class="ww-base">
         <wwObject v-if="content.background" isBackground v-bind="content.background" class="background"></wwObject>
-        <wwContainer class="content" v-bind="container" />
+        <wwObject v-bind="content.container" class="content" />
     </div>
 </template>
 
