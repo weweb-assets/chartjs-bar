@@ -1,7 +1,7 @@
 <template>
     <div class="ww-base">
-        <wwObject v-if="content.background" isBackground v-bind="content.background" class="background"></wwObject>
         <wwObject v-bind="content.container" class="content" />
+        <wwLayout path="wwObjects"></wwLayout>
     </div>
 </template>
 
@@ -12,8 +12,11 @@ export default {
         content: Object,
     },
     wwDefaultContent: {
-        background: { isWwObject: true, type: 'ww-color' },
-        container: { isWwObject: true, type: 'ww-container' },
+        container: {
+            isWwObject: true,
+            type: 'ww-container',
+        },
+        wwObjects: [],
     },
 };
 </script>
@@ -21,15 +24,8 @@ export default {
 <style lang="scss" scoped>
 .ww-base {
     position: relative;
-    min-height: 120px;
     box-sizing: border-box;
-    .background {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-    }
+    padding: 100px 30px;
     .content {
         height: 100%;
         width: 100%;
