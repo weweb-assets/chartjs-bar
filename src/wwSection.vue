@@ -1,5 +1,5 @@
 <template>
-    <wwLayout path="wwObjects"></wwLayout>
+    <wwLayout path="wwObjects" class="section-base"></wwLayout>
 </template>
 
 <script>
@@ -13,3 +13,10 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.section-base {
+    display: flex;
+    flex-direction: column;
+}
+</style>
