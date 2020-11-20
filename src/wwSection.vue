@@ -1,8 +1,5 @@
 <template>
-    <div class="ww-base">
-        <wwObject v-bind="content.container" class="content" />
-        <wwLayout path="wwObjects"></wwLayout>
-    </div>
+    <wwLayout path="wwObjects"></wwLayout>
 </template>
 
 <script>
@@ -12,23 +9,7 @@ export default {
         content: Object,
     },
     wwDefaultContent: {
-        container: {
-            isWwObject: true,
-            type: 'ww-container',
-        },
         wwObjects: [],
     },
 };
 </script>
-
-<style lang="scss" scoped>
-.ww-base {
-    position: relative;
-    box-sizing: border-box;
-    padding: 100px 30px;
-    .content {
-        height: 100%;
-        width: 100%;
-    }
-}
-</style>
