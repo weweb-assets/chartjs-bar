@@ -18,5 +18,6 @@ export default {
 .section-base {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
 }
 </style>
