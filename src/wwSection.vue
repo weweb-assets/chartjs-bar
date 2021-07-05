@@ -4,9 +4,8 @@
 
 <script>
 export default {
-    name: '__COMPONENT_NAME__',
     props: {
-        content: Object,
+        content: { type: Object, required: true },
     },
     wwDefaultContent: {
         wwObjects: [],
