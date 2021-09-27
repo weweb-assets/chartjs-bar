@@ -7,9 +7,6 @@ export default {
     props: {
         content: { type: Object, required: true },
     },
-    wwDefaultContent: {
-        wwObjects: [],
-    },
 };
 </script>
 
