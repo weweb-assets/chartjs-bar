@@ -18,6 +18,17 @@ export default {
             bindable: 'repeatable',
             defaultValue: [],
         },
+        reload: {
+            type: 'Button',
+            label: null,
+            options: {
+                // Translated text to be displayed inside button
+                text: {
+                    en: 'Reload',
+                },
+                action: 'reload', // name of one of your component methods
+            },
+        },
         label: {
             label: { en: 'Label', fr: 'Label' },
             type: 'Info',

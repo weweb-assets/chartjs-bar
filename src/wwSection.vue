@@ -30,18 +30,25 @@ export default {
     },
     watch: {
         'content.datasets'(data) {
-            if (this.chartInstance) this.chartInstance.destroy();
-            console.log(data);
+            if (this.chartInstance) {
+                setTimeout(() => {
+                    this.chartInstance.reset();
+                    this.chartInstance.update();
+                    console.log('okok');
+                }, 500);
+            }
+            console.log('dataset', data);
             this.initChart();
         },
-        'content.labels'(data) {
-            if (this.chartInstance) this.chartInstance.destroy();
-            console.log(data);
+        'content.labels'() {
+            if (this.chartInstance) {
+                this.chartInstance.reset();
+                this.chartInstance.update();
+            }
             this.initChart();
         },
     },
     mounted() {
-        if (this.chartInstance) this.chartInstance.destroy();
         this.initChart();
     },
     beforeUnmount() {
@@ -49,10 +56,16 @@ export default {
     },
     methods: {
         initChart() {
-            this.chartInstance = new Chart(
-                wwLib.getFrontDocument().getElementById('chartjs-vertical-bar'),
-                this.config
-            );
+            this.$nextTick(() => {
+                if (this.chartInstance) this.chartInstance.destroy();
+                this.chartInstance = new Chart(
+                    wwLib.getFrontDocument().getElementById('chartjs-vertical-bar'),
+                    this.config
+                );
+            });
+        },
+        reload() {
+            this.initChart();
         },
     },
 };
