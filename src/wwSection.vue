@@ -22,8 +22,16 @@ export default {
             return {
                 type: 'bar',
                 data: {
-                    labels: this.labels || ['Tatooine', 'Coruscant', 'Kashyyyk', 'Dagobah', 'Bespin', 'Endor', 'Hoth'],
-                    datasets: this.datasets || [
+                    labels: this.content.labels || [
+                        'Tatooine',
+                        'Coruscant',
+                        'Kashyyyk',
+                        'Dagobah',
+                        'Bespin',
+                        'Endor',
+                        'Hoth',
+                    ],
+                    datasets: this.content.datasets || [
                         {
                             label: 'placeholder',
                             backgroundColor: 'rgb(255, 99, 132)',
@@ -39,21 +47,27 @@ export default {
                             position: 'top',
                         },
                     },
+                    scales: {
+                        y: {
+                            // the data minimum used for determining the ticks is Math.min(dataMin, suggestedMin)
+                            suggestedMin: 30,
+
+                            // the data maximum used for determining the ticks is Math.max(dataMax, suggestedMax)
+                            suggestedMax: 50,
+                        },
+                    },
                 },
             };
         },
-        datasets() {
-            return this.content.datasets.map(item => {
-                return {
-                    label: item[this.content.labelField],
-                    backgroundColor: item[this.content.backgroundColorField],
-                    data: item[this.content.dataField],
-                };
-            });
-        },
-        labels() {
-            return this.content.labels;
-        },
+        // datasets() {
+        //     return this.content.datasets.map(item => {
+        //         return {
+        //             label: item[this.content.labelField],
+        //             backgroundColor: item[this.content.backgroundColorField],
+        //             data: item[this.content.dataField],
+        //         };
+        //     });
+        // },
     },
     mounted() {
         this.initChart();
