@@ -22,22 +22,8 @@ export default {
             return {
                 type: 'bar',
                 data: {
-                    labels: this.content.labels || [
-                        'Tatooine',
-                        'Coruscant',
-                        'Kashyyyk',
-                        'Dagobah',
-                        'Bespin',
-                        'Endor',
-                        'Hoth',
-                    ],
-                    datasets: this.content.datasets || [
-                        {
-                            label: 'placeholder',
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            data: [100.0, 5.0, 2.0, 20.0, 30.0, 10.0, 45.0],
-                        },
-                    ],
+                    labels: this.content.labels,
+                    datasets: this.content.datasets,
                 },
                 options: {
                     responsive: true,

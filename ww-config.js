@@ -16,8 +16,8 @@ export default {
                 text: { en: 'Chart labels' },
             },
             section: 'settings',
-            bindable: 'repeatable',
-            defaultValue: [],
+            bindable: 'list',
+            defaultValue: ['Tatooine', 'Coruscant', 'Kashyyyk', 'Dagobah', 'Bespin', 'Endor', 'Hoth'],
         },
         // labelField: {
         //     label: { en: 'Label field', fr: 'Label field' },
@@ -56,8 +56,14 @@ export default {
                 text: { en: 'Chart Datasets' },
             },
             section: 'settings',
-            bindable: 'repeatable',
-            defaultValue: [],
+            bindable: 'list',
+            defaultValue: [
+                {
+                    label: 'Millenium Falcon',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    data: [100.0, 5.0, 2.0, 20.0, 30.0, 10.0, 45.0],
+                },
+            ],
         },
         reload: {
             type: 'Button',
