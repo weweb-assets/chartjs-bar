@@ -15,8 +15,36 @@ export default {
             options: {
                 text: { en: 'Chart labels' },
             },
+            section: 'settings',
             bindable: 'repeatable',
             defaultValue: [],
+        },
+        labelField: {
+            label: { en: 'Label field', fr: 'Label field' },
+            type: 'Text',
+            options: {
+                placeholder: 'Label field',
+            },
+            section: 'settings',
+            defaultValue: 'Label',
+        },
+        backgroundColorField: {
+            label: { en: 'Color field', fr: 'Color field' },
+            type: 'Text',
+            options: {
+                placeholder: 'Color field',
+            },
+            section: 'settings',
+            defaultValue: 'Color',
+        },
+        dataField: {
+            label: { en: 'Data field', fr: 'Data field' },
+            type: 'Text',
+            options: {
+                placeholder: 'Data field',
+            },
+            section: 'settings',
+            defaultValue: 'Data',
         },
         datasets: {
             label: {
@@ -27,6 +55,7 @@ export default {
             options: {
                 text: { en: 'Chart Datasets' },
             },
+            section: 'settings',
             bindable: 'repeatable',
             defaultValue: [],
         },
@@ -35,10 +64,11 @@ export default {
             label: null,
             options: {
                 text: {
-                    en: 'Reload',
+                    en: 'Draw',
                 },
                 action: 'reload',
             },
+            section: 'settings',
         },
     },
 };

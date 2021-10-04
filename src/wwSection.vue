@@ -14,11 +14,22 @@ export default {
     },
     data() {
         return {
-            config: {
+            chartInstance: null,
+        };
+    },
+    computed: {
+        config() {
+            return {
                 type: 'bar',
                 data: {
-                    labels: this.labels || [],
-                    datasets: this.datasets || [],
+                    labels: this.labels || ['Tatooine', 'Coruscant', 'Kashyyyk', 'Dagobah', 'Bespin', 'Endor', 'Hoth'],
+                    datasets: this.datasets || [
+                        {
+                            label: 'placeholder',
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            data: [100.0, 5.0, 2.0, 20.0, 30.0, 10.0, 45.0],
+                        },
+                    ],
                 },
                 options: {
                     responsive: true,
@@ -27,37 +38,21 @@ export default {
                         legend: {
                             position: 'top',
                         },
-                        title: {
-                            display: true,
-                            text: 'Star Wars',
-                        },
                     },
                 },
-            },
-            chartInstance: null,
-        };
-    },
-    computed: {
+            };
+        },
         datasets() {
             return this.content.datasets.map(item => {
                 return {
-                    label: item['Label'],
-                    backgroundColor: item['Color'],
-                    data: item['Data'],
+                    label: item[this.content.labelField],
+                    backgroundColor: item[this.content.backgroundColorField],
+                    data: item[this.content.dataField],
                 };
             });
         },
         labels() {
             return this.content.labels;
-        },
-    },
-    watch: {
-        datasets() {
-            if (this.chartInstance) {
-                this.chartInstance.destroy();
-            } else {
-                this.initChart();
-            }
         },
     },
     mounted() {
@@ -68,20 +63,15 @@ export default {
     },
     methods: {
         initChart() {
-            this.$nextTick(() => {
-                if (this.chartInstance) this.chartInstance.destroy();
-                this.chartInstance = new Chart(
-                    wwLib.getFrontDocument().getElementById('chartjs-vertical-bar'),
-                    this.config
-                );
-            });
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.chartInstance = new Chart(
+                wwLib.getFrontDocument().getElementById('chartjs-vertical-bar'),
+                this.config
+            );
         },
         reload() {
-            if (this.chartInstance) {
-                this.chartInstance.destroy();
-            }
+            if (this.chartInstance) this.chartInstance.destroy();
             this.initChart();
-            console.log(this.chartInstance);
         },
     },
 };
