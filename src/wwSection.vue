@@ -45,15 +45,12 @@ export default {
                 },
             };
         },
-        // datasets() {
-        //     return this.content.datasets.map(item => {
-        //         return {
-        //             label: item[this.content.labelField],
-        //             backgroundColor: item[this.content.backgroundColorField],
-        //             data: item[this.content.dataField],
-        //         };
-        //     });
-        // },
+    },
+    watch: {
+        config() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },
     },
     mounted() {
         this.initChart();
