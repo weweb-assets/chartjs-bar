@@ -6,6 +6,18 @@ export default {
         },
     },
     properties: {
+        labels: {
+            label: {
+                en: 'Labels',
+                fr: 'Labels',
+            },
+            type: 'Info',
+            options: {
+                text: { en: 'Chart labels' },
+            },
+            bindable: 'repeatable',
+            defaultValue: [],
+        },
         datasets: {
             label: {
                 en: 'Datasets',
@@ -13,7 +25,7 @@ export default {
             },
             type: 'Info',
             options: {
-                text: { en: 'Datasets' },
+                text: { en: 'Chart Datasets' },
             },
             bindable: 'repeatable',
             defaultValue: [],
@@ -22,48 +34,11 @@ export default {
             type: 'Button',
             label: null,
             options: {
-                // Translated text to be displayed inside button
                 text: {
                     en: 'Reload',
                 },
-                action: 'reload', // name of one of your component methods
+                action: 'reload',
             },
-        },
-        label: {
-            label: { en: 'Label', fr: 'Label' },
-            type: 'Info',
-            options: {
-                text: 'Label',
-            },
-            bindable: true,
-        },
-        backgroundColor: {
-            label: { en: 'Background color', fr: 'Background color' },
-            type: 'Info',
-            options: {
-                text: 'rgb(255, 99, 132)',
-            },
-            bindable: true,
-        },
-        borderColor: {
-            label: { en: 'Border color', fr: 'Border color' },
-            type: 'Info',
-            options: {
-                text: 'rgb(255, 99, 132)',
-            },
-            bindable: true,
-        },
-        data: {
-            label: {
-                en: 'Data',
-                fr: 'Data',
-            },
-            type: 'Info',
-            options: {
-                text: { en: 'Data set' },
-            },
-            bindable: true,
-            defaultValue: [],
         },
     },
 };

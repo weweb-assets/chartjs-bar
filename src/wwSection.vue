@@ -17,35 +17,47 @@ export default {
             config: {
                 type: 'bar',
                 data: {
-                    labels: ['Tatooine', 'Coruscant', 'Kashyyyk', 'Dagobah', 'Bespin', 'Endor', 'Hoth'],
-                    datasets: [...this.content.datasets],
+                    labels: this.labels || [],
+                    datasets: this.datasets || [],
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Star Wars',
+                        },
+                    },
                 },
             },
             chartInstance: null,
         };
     },
-    watch: {
-        'content.datasets'(data) {
-            if (this.chartInstance) {
-                setTimeout(() => {
-                    this.chartInstance.reset();
-                    this.chartInstance.update();
-                    console.log('okok');
-                }, 500);
-            }
-            console.log('dataset', data);
-            this.initChart();
+    computed: {
+        datasets() {
+            return this.content.datasets.map(item => {
+                return {
+                    label: item['Label'],
+                    backgroundColor: item['Color'],
+                    data: item['Data'],
+                };
+            });
         },
-        'content.labels'() {
+        labels() {
+            return this.content.labels;
+        },
+    },
+    watch: {
+        datasets() {
             if (this.chartInstance) {
-                this.chartInstance.reset();
-                this.chartInstance.update();
+                this.chartInstance.destroy();
+            } else {
+                this.initChart();
             }
-            this.initChart();
         },
     },
     mounted() {
@@ -65,7 +77,11 @@ export default {
             });
         },
         reload() {
+            if (this.chartInstance) {
+                this.chartInstance.destroy();
+            }
             this.initChart();
+            console.log(this.chartInstance);
         },
     },
 };
