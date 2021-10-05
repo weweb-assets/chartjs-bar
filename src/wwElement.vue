@@ -48,7 +48,12 @@ export default {
     },
     watch: {
         config() {
-            if (this.chartInstance) this.chartInstance.destroy();
+            if (this.chartInstance) {
+                // this.chartInstance.data.labels = this.config.data.labels;
+                // this.chartInstance.data.datasets = this.config.data.datasets;
+                // this.chartInstance.update();
+                this.chartInstance.destroy();
+            }
             this.initChart();
         },
     },
@@ -61,10 +66,9 @@ export default {
     methods: {
         initChart() {
             if (this.chartInstance) this.chartInstance.destroy();
-            this.chartInstance = new Chart(
-                wwLib.getFrontDocument().getElementById('chartjs-vertical-bar'),
-                this.config
-            );
+            const element = wwLib.getFrontDocument().getElementById('chartjs-vertical-bar').getContext('2d');
+            if (!element) return;
+            this.chartInstance = new Chart(element, this.config);
         },
         reload() {
             if (this.chartInstance) this.chartInstance.destroy();
