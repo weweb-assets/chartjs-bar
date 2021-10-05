@@ -11,9 +11,6 @@ Chart.register(...registerables);
 export default {
     props: {
         content: { type: Object, required: true },
-        /* wwEditor:start */
-        wwEditorState: { type: Object, required: true },
-        /* wwEditor:end */
     },
     data() {
         return {
@@ -21,13 +18,6 @@ export default {
         };
     },
     computed: {
-        isEditing() {
-            /* wwEditor:start */
-            return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
-            /* wwEditor:end */
-            // eslint-disable-next-line no-unreachable
-            return false;
-        },
         config() {
             return {
                 type: 'bar',
@@ -48,13 +38,16 @@ export default {
         },
     },
     watch: {
-        isEditing() {
-            if (this.chartInstance) this.chartInstance.destroy();
-            this.initChart();
-        },
         config() {
-            if (this.chartInstance) this.chartInstance.destroy();
-            this.initChart();
+            if (
+                this.content.labels &&
+                this.content.labels.length &&
+                this.content.datasets &&
+                this.content.datasets.length
+            ) {
+                if (this.chartInstance) this.chartInstance.destroy();
+                this.initChart();
+            }
         },
     },
     mounted() {
@@ -65,14 +58,8 @@ export default {
     },
     methods: {
         initChart() {
-            if (this.chartInstance) this.chartInstance.destroy();
-            const element = wwLib.getFrontDocument().getElementById('chartjs-vertical-bar').getContext('2d');
-            if (!element) return;
+            const element = wwLib.getFrontDocument().getElementById('chartjs-vertical-bar');
             this.chartInstance = new Chart(element, this.config);
-        },
-        reload() {
-            if (this.chartInstance) this.chartInstance.destroy();
-            this.initChart();
         },
     },
 };
