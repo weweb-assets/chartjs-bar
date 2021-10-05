@@ -1,8 +1,8 @@
 export default {
     editor: {
         label: {
-            fr: 'Base',
-            en: 'Base',
+            fr: 'Chartjs - Bar',
+            en: 'Chartjs - Bar',
         },
     },
     properties: {
