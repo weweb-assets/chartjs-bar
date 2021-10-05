@@ -13,9 +13,8 @@ export default {
         content: { type: Object, required: true },
     },
     data() {
-        return {
-            chartInstance: null,
-        };
+        this.chartInstance = null;
+        return this.chartInstance;
     },
     computed: {
         config() {
@@ -40,13 +39,15 @@ export default {
     watch: {
         config() {
             if (
+                this.chartInstance &&
                 this.content.labels &&
                 this.content.labels.length &&
                 this.content.datasets &&
                 this.content.datasets.length
             ) {
-                if (this.chartInstance) this.chartInstance.destroy();
-                this.initChart();
+                this.chartInstance.data.labels = this.content.labels;
+                this.chartInstance.data.datasets = this.content.datasets;
+                this.chartInstance.update();
             }
         },
     },
