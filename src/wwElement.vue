@@ -11,6 +11,9 @@ Chart.register(...registerables);
 export default {
     props: {
         content: { type: Object, required: true },
+        /* wwEditor:start */
+        wwEditorState: { type: Object, required: true },
+        /* wwEditor:end */
     },
     data() {
         return {
@@ -18,6 +21,13 @@ export default {
         };
     },
     computed: {
+        isEditing() {
+            /* wwEditor:start */
+            return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
+            /* wwEditor:end */
+            // eslint-disable-next-line no-unreachable
+            return false;
+        },
         config() {
             return {
                 type: 'bar',
@@ -33,27 +43,17 @@ export default {
                             position: 'top',
                         },
                     },
-                    scales: {
-                        y: {
-                            // the data minimum used for determining the ticks is Math.min(dataMin, suggestedMin)
-                            suggestedMin: 30,
-
-                            // the data maximum used for determining the ticks is Math.max(dataMax, suggestedMax)
-                            suggestedMax: 50,
-                        },
-                    },
                 },
             };
         },
     },
     watch: {
+        isEditing() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },
         config() {
-            if (this.chartInstance) {
-                // this.chartInstance.data.labels = this.config.data.labels;
-                // this.chartInstance.data.datasets = this.config.data.datasets;
-                // this.chartInstance.update();
-                this.chartInstance.destroy();
-            }
+            if (this.chartInstance) this.chartInstance.destroy();
             this.initChart();
         },
     },
