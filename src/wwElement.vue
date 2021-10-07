@@ -5,8 +5,40 @@
 </template>
 
 <script>
-import { Chart, registerables } from 'chart.js';
-Chart.register(...registerables);
+import {
+    Chart,
+    BarElement,
+    BarController,
+    LinearScale,
+    LogarithmicScale,
+    RadialLinearScale,
+    TimeScale,
+    TimeSeriesScale,
+    Decimation,
+    Filler,
+    CategoryScale,
+    Legend,
+    Title,
+    Tooltip,
+    SubTitle,
+} from 'chart.js';
+
+Chart.register(
+    BarElement,
+    BarController,
+    LinearScale,
+    LogarithmicScale,
+    RadialLinearScale,
+    TimeScale,
+    TimeSeriesScale,
+    Decimation,
+    Filler,
+    CategoryScale,
+    Legend,
+    Title,
+    Tooltip,
+    SubTitle
+);
 
 export default {
     props: {
@@ -25,11 +57,26 @@ export default {
                     datasets: this.content.datasets,
                 },
                 options: {
+                    indexAxis: this.content.axis,
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'top',
+                            position: this.content.legendPosition,
+                            labels: { usePointStyle: true },
+                            onHover: this.handleHover,
+                            onLeave: this.handleLeave,
+                        },
+                    },
+                    interaction: {
+                        intersect: false,
+                    },
+                    scales: {
+                        x: {
+                            stacked: this.content.stacked,
+                        },
+                        y: {
+                            stacked: this.content.stacked,
                         },
                     },
                 },
@@ -49,6 +96,22 @@ export default {
                 this.chartInstance.data.datasets = this.content.datasets;
                 this.chartInstance.update();
             }
+        },
+        'content.legendPosition'() {
+            this.chartInstance.options.plugins.legend.position = this.content.legendPosition;
+            this.chartInstance.update();
+        },
+        'content.legendAlignement'() {
+            this.chartInstance.options.plugins.legend.align = this.content.legendAlignement;
+            this.chartInstance.update();
+        },
+        'content.axis'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },
+        'content.stacked'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
         },
     },
     mounted() {
