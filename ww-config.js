@@ -94,12 +94,12 @@ export default {
             defaultValue: [
                 {
                     label: 'Millenium Falcon',
-                    backgroundColor: 'rgb(255, 99, 132)',
+                    backgroundColor: '#099AF2',
                     data: [100.0, 5.0, 2.0, 20.0, 30.0, 10.0, 45.0],
                 },
                 {
                     label: 'TIE Fighter',
-                    backgroundColor: '#F7AB49',
+                    backgroundColor: '#9BD7FB',
                     data: [26, 42, 35, 48, 52, 24, 75],
                 },
             ],
