@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container" style="position: relative">
-        <canvas id="chartjs-vertical-bar"></canvas>
+        <canvas class="chartjs-bar"></canvas>
     </div>
 </template>
 
@@ -122,7 +122,7 @@ export default {
     },
     methods: {
         initChart() {
-            const element = wwLib.getFrontDocument().getElementById('chartjs-vertical-bar');
+            const element = this.$el.querySelector('.chartjs-bar');
             this.chartInstance = new Chart(element, this.config);
         },
     },
