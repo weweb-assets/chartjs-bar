@@ -27,7 +27,7 @@ export default {
         },
         legendAlignement: {
             label: {
-                en: 'Legend alignement',
+                en: 'Legend alignment',
                 fr: 'Legend alignement',
             },
             type: 'TextSelect',
