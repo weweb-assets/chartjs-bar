@@ -238,22 +238,6 @@ export default {
         },
     },
     watch: {
-        config() {
-            // if (
-            //     this.chartInstance &&
-            //     this.content.labels &&
-            //     this.content.labels.length &&
-            //     this.content.datasets &&
-            //     this.content.datasets.length
-            // ) {
-            //     this.chartInstance.data.labels = this.content.labels;
-            //     this.chartInstance.data.datasets = this.content.datasets;
-            //     this.chartInstance.update();
-            // }
-            // this.chartInstance.data.labels = this.config.data.labels;
-            // this.chartInstance.data.datasets = this.config.data.datasets;
-            // this.chartInstance.update();
-        },
         'config.data.datasets'() {
             this.chartInstance.data.datasets = this.config.data.datasets;
             if (this.chartInstance) this.chartInstance.destroy();
