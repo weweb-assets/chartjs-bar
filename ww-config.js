@@ -1,24 +1,18 @@
 export default {
     editor: {
-        label: {
-            fr: 'Chart - Bar',
-            en: 'Chart - Bar',
-        },
+        label: 'Chart - Bar',
         icon: 'fontawesome/regular/chart-bar',
     },
     properties: {
         legendPosition: {
-            label: {
-                en: 'Legend position',
-                fr: 'Legend position',
-            },
+            label: 'Legend position',
             type: 'TextSelect',
             options: {
                 options: [
-                    { value: 'top', label: { en: 'Top' } },
-                    { value: 'bottom', label: { en: 'Bottom' } },
-                    { value: 'left', label: { en: 'Left' } },
-                    { value: 'right', label: { en: 'Right' } },
+                    { value: 'top', label: 'Top' },
+                    { value: 'bottom', label: 'Bottom' },
+                    { value: 'left', label: 'Left' },
+                    { value: 'right', label: 'Right' },
                 ],
             },
             bindable: true,
@@ -26,16 +20,13 @@ export default {
             defaultValue: 'top',
         },
         legendAlignement: {
-            label: {
-                en: 'Legend alignment',
-                fr: 'Legend alignement',
-            },
+            label: 'Legend alignment',
             type: 'TextSelect',
             options: {
                 options: [
-                    { value: 'start', label: { en: 'Start' } },
-                    { value: 'center', label: { en: 'Center' } },
-                    { value: 'end', label: { en: 'End' } },
+                    { value: 'start', label: 'Start' },
+                    { value: 'center', label: 'Center' },
+                    { value: 'end', label: 'End' },
                 ],
             },
             bindable: true,
@@ -43,7 +34,7 @@ export default {
             defaultValue: 'center',
         },
         axis: {
-            label: { en: 'Axis', fr: 'Axis' },
+            label: 'Axis',
             type: 'BigIconRadioGroup',
             options: {
                 choices: [
@@ -57,36 +48,47 @@ export default {
         },
         stacked: {
             type: 'OnOff',
-            label: {
-                en: 'Stacked bars',
-                fr: 'Stacked bars',
-            },
+            label: 'Stacked bars',
             bindable: true,
             responsive: true,
             defaultValue: false,
         },
-        labels: {
-            label: {
-                en: 'Labels',
-                fr: 'Labels',
+        startAtZero: {
+            label: 'Start at zero',
+            type: 'OnOff',
+            bindable: true,
+            responsive: true,
+            defaultValue: true,
+        },
+        dataType: {
+            label: 'Configuration',
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: 'no-code', label: 'No-code' },
+                    { value: 'custom', label: 'Custom (dev-friendly)' },
+                ],
             },
+            section: 'settings',
+            defaultValue: 'custom',
+        },
+        labels: {
+            label: 'Labels',
             type: 'Info',
             options: {
-                text: { en: 'Chart labels' },
+                text: 'Chart labels',
             },
             responsive: true,
             section: 'settings',
             bindable: 'list',
             defaultValue: ['Tatooine', 'Coruscant', 'Kashyyyk', 'Dagobah', 'Bespin', 'Endor', 'Hoth'],
+            hidden: content => content.dataType !== 'custom',
         },
         datasets: {
-            label: {
-                en: 'Datasets',
-                fr: 'Datasets',
-            },
+            label: 'Datasets',
             type: 'Info',
             options: {
-                text: { en: 'Chart Datasets' },
+                text: 'Chart Datasets',
             },
             responsive: true,
             section: 'settings',
@@ -103,6 +105,235 @@ export default {
                     data: [26, 42, 35, 48, 52, 24, 75],
                 },
             ],
+            hidden: content => content.dataType !== 'custom',
+        },
+        data: {
+            label: {
+                en: 'Data',
+                fr: 'Data',
+            },
+            type: 'Info',
+            options: {
+                text: 'Chart data',
+            },
+            responsive: true,
+            section: 'settings',
+            bindable: 'list',
+            defaultValue: null,
+            hidden: content => content.dataType !== 'no-code',
+        },
+        xAxisTitle: {
+            label: 'X-axis',
+            section: 'settings',
+            hidden: content => content.dataType !== 'no-code' || !content.data,
+        },
+        dataXField: {
+            label: 'Field',
+            type: 'ObjectPropertyPath',
+            options: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data[0]) return null;
+                return { object: data[0] };
+            },
+            section: 'settings',
+            defaultValue: null,
+            hidden: content => content.dataType !== 'no-code' || !content.data,
+        },
+        dataXFieldProperty: {
+            label: 'Field property',
+            type: 'ObjectPropertyPath',
+            options: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data.length) return true;
+                const field = _.get(data[0], content.dataXField);
+                return !Array.isArray(field) || !field.length ? null : { object: field[0] };
+            },
+            defaultValue: null,
+            section: 'settings',
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data[0]) return true;
+                const field = _.get(data[0], content.dataXField);
+                return (
+                    content.dataType !== 'no-code' ||
+                    !content.data ||
+                    !Array.isArray(field) ||
+                    !field.length ||
+                    typeof field[0] !== 'object'
+                );
+            },
+        },
+        dataOrderBy: {
+            label: 'Order by',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    { value: 'x', label: 'X value' },
+                    { value: 'y', label: 'Y value' },
+                ],
+            },
+            section: 'settings',
+            defaultValue: 'x',
+            hidden: content => content.dataType !== 'no-code' || !content.data,
+        },
+        dataDirection: {
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    { value: 'ASC', label: 'Ascending' },
+                    { value: 'DESC', label: 'Descending' },
+                ],
+            },
+            section: 'settings',
+            defaultValue: 'ASC',
+            hidden: content => content.dataType !== 'no-code' || !content.data,
+        },
+        dataXEmpty: {
+            label: 'Include empty values',
+            type: 'OnOff',
+            section: 'settings',
+            defaultValue: false,
+            hidden: content => content.dataType !== 'no-code' || !content.data,
+        },
+        yAxisTitle: {
+            label: {
+                en: 'Y-axis',
+                fr: 'Y-axis',
+            },
+            section: 'settings',
+            hidden: content => content.dataType !== 'no-code' || !content.data,
+        },
+        yAxis: {
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    { value: 'record-count', label: 'Record count' },
+                    { value: 'field-summary', label: 'Field summary' },
+                ],
+            },
+            section: 'settings',
+            defaultValue: 'record-count',
+            hidden: content => content.dataType !== 'no-code' || !content.data,
+        },
+        dataYField: {
+            label: 'Field',
+            type: 'ObjectPropertyPath',
+            options: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data[0]) return null;
+                return { object: data[0] };
+            },
+            section: 'settings',
+            defaultValue: null,
+            hidden: content => content.dataType !== 'no-code' || !content.data || content.yAxis !== 'field-summary',
+        },
+        dataYFieldProperty: {
+            label: 'Field property',
+            type: 'ObjectPropertyPath',
+            options: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data.length) return true;
+                const field = _.get(data[0], content.dataYField);
+                return !Array.isArray(field) || !field.length ? null : { object: field[0] };
+            },
+            defaultValue: null,
+            section: 'settings',
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data.length) return true;
+                const field = _.get(data[0], content.dataYField);
+                return (
+                    content.dataType !== 'no-code' ||
+                    !content.data ||
+                    content.yAxis !== 'field-summary' ||
+                    !Array.isArray(field) ||
+                    !field.length ||
+                    typeof field[0] !== 'object'
+                );
+            },
+        },
+        aggregate: {
+            label: 'Aggregate',
+            type: 'TextSelect',
+            options: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                let field = _.get(data[0], content.dataYField);
+                if (Array.isArray(field) && field.length) field = _.get(field[0], content.dataYFieldProperty);
+                const isNumber = Number.isFinite(data[0] && content.dataYField && field);
+                return {
+                    placeholder: 'Select',
+                    options: [
+                        { value: 'distinct', label: 'Distinct' },
+                        isNumber ? { value: 'sum', label: 'Sum' } : null,
+                        isNumber ? { value: 'average', label: 'Average' } : null,
+                        isNumber ? { value: 'median', label: 'Median' } : null,
+                        isNumber ? { value: 'min', label: 'Min' } : null,
+                        isNumber ? { value: 'max', label: 'Max' } : null,
+                    ].filter(Boolean),
+                };
+            },
+            section: 'settings',
+            defaultValue: 'distinct',
+            hidden: content => content.dataType !== 'no-code' || !content.data || content.yAxis !== 'field-summary',
+        },
+        groupBy: {
+            label: 'Group by',
+            type: 'ObjectPropertyPath',
+            options: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data[0]) return null;
+                return { object: data[0] };
+            },
+            section: 'settings',
+            defaultValue: null,
+            hidden: content =>
+                content.dataType !== 'no-code' ||
+                !content.data ||
+                (content.yAxis !== 'record-count' && content.aggregate !== 'distinct' && content.aggregate !== 'sum'),
+        },
+        groupByProperty: {
+            label: 'Group by property',
+            type: 'ObjectPropertyPath',
+            options: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data.length) return true;
+                const field = _.get(data[0], content.groupBy);
+                return !Array.isArray(field) || !field.length ? null : { object: field[0] };
+            },
+            defaultValue: null,
+            section: 'settings',
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                if (!Array.isArray(data) || !data[0]) return true;
+                const field = _.get(data[0], content.groupBy);
+                return (
+                    content.dataType !== 'no-code' ||
+                    !content.data ||
+                    !Array.isArray(field) ||
+                    !field.length ||
+                    typeof field[0] !== 'object'
+                );
+            },
+        },
+        colors: {
+            label: 'Colors',
+            type: 'Array',
+            section: 'settings',
+            options: {
+                item: {
+                    type: 'Color',
+                },
+            },
+            defaultValue: [
+                'rgba(255, 99, 132)',
+                'rgba(54, 162, 235)',
+                'rgba(255, 206, 86)',
+                'rgba(75, 192, 192)',
+                'rgba(153, 102, 255)',
+                'rgba(255, 159, 64)',
+            ],
+            bindable: true,
+            hidden: content => content.dataType !== 'no-code' || !content.data,
         },
     },
 };
