@@ -53,7 +53,7 @@ export default {
             let labels = [];
             let datasets = [];
 
-            if (this.content.dataType === 'no-code') {
+            if (this.content.dataType === 'guided') {
                 labels = undefined;
                 const data =
                     (!this.content.data || Array.isArray(this.content.data)
@@ -65,9 +65,9 @@ export default {
                 const dataXField = this.content.dataXField;
                 const dataXFieldProperty = this.content.dataXFieldProperty;
                 const dataYField =
-                    this.content.yAxis === 'record-count' ? this.content.dataXField : this.content.dataYField;
+                    this.content.yAxis === 'item-count' ? this.content.dataXField : this.content.dataYField;
                 const dataYFieldProperty = this.content.dataYFieldProperty;
-                const aggregate = this.content.yAxis === 'record-count' ? 'record-count' : this.content.aggregate;
+                const aggregate = this.content.yAxis === 'item-count' ? 'item-count' : this.content.aggregate;
                 const colors = this.content.colors;
                 if (!groupBy) {
                     datasets = [{ label: dataXField, backgroundColor: colors[0], data: [] }];
@@ -291,7 +291,7 @@ export default {
         aggregate(operator, data) {
             if (!data) return undefined;
             switch (operator) {
-                case 'record-count':
+                case 'item-count':
                     return [data].flat().length;
                 case 'distinct':
                     return [...new Set([data].flat())].length;

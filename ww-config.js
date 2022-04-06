@@ -65,12 +65,12 @@ export default {
             type: 'TextSelect',
             options: {
                 options: [
-                    { value: 'no-code', label: 'No-code' },
-                    { value: 'custom', label: 'Custom (dev-friendly)' },
+                    { value: 'guided', label: 'Guided' },
+                    { value: 'advanced', label: 'Advanced' },
                 ],
             },
             section: 'settings',
-            defaultValue: 'custom',
+            defaultValue: 'advanced',
         },
         labels: {
             label: 'Labels',
@@ -82,7 +82,7 @@ export default {
             section: 'settings',
             bindable: 'list',
             defaultValue: ['Tatooine', 'Coruscant', 'Kashyyyk', 'Dagobah', 'Bespin', 'Endor', 'Hoth'],
-            hidden: content => content.dataType !== 'custom',
+            hidden: content => content.dataType !== 'advanced',
         },
         datasets: {
             label: 'Datasets',
@@ -105,7 +105,7 @@ export default {
                     data: [26, 42, 35, 48, 52, 24, 75],
                 },
             ],
-            hidden: content => content.dataType !== 'custom',
+            hidden: content => content.dataType !== 'advanced',
         },
         data: {
             label: {
@@ -114,18 +114,18 @@ export default {
             },
             type: 'Info',
             options: {
-                text: 'Chart data',
+                text: 'Bind collection data',
             },
             responsive: true,
             section: 'settings',
             bindable: 'list',
             defaultValue: null,
-            hidden: content => content.dataType !== 'no-code',
+            hidden: content => content.dataType !== 'guided',
         },
         xAxisTitle: {
             label: 'X-axis',
             section: 'settings',
-            hidden: content => content.dataType !== 'no-code' || !content.data,
+            hidden: content => content.dataType !== 'guided' || !content.data,
         },
         dataXField: {
             label: 'Field',
@@ -137,7 +137,7 @@ export default {
             },
             section: 'settings',
             defaultValue: null,
-            hidden: content => content.dataType !== 'no-code' || !content.data,
+            hidden: content => content.dataType !== 'guided' || !content.data,
         },
         dataXFieldProperty: {
             label: 'Field property',
@@ -155,7 +155,7 @@ export default {
                 if (!Array.isArray(data) || !data[0]) return true;
                 const field = _.get(data[0], content.dataXField);
                 return (
-                    content.dataType !== 'no-code' ||
+                    content.dataType !== 'guided' ||
                     !content.data ||
                     !Array.isArray(field) ||
                     !field.length ||
@@ -174,7 +174,7 @@ export default {
             },
             section: 'settings',
             defaultValue: 'x',
-            hidden: content => content.dataType !== 'no-code' || !content.data,
+            hidden: content => content.dataType !== 'guided' || !content.data,
         },
         dataDirection: {
             type: 'TextRadioGroup',
@@ -186,34 +186,30 @@ export default {
             },
             section: 'settings',
             defaultValue: 'ASC',
-            hidden: content => content.dataType !== 'no-code' || !content.data,
+            hidden: content => content.dataType !== 'guided' || !content.data,
         },
         dataXEmpty: {
             label: 'Include empty values',
             type: 'OnOff',
             section: 'settings',
             defaultValue: false,
-            hidden: content => content.dataType !== 'no-code' || !content.data,
+            hidden: content => content.dataType !== 'guided' || !content.data,
         },
-        yAxisTitle: {
+        yAxis: {
             label: {
                 en: 'Y-axis',
                 fr: 'Y-axis',
             },
-            section: 'settings',
-            hidden: content => content.dataType !== 'no-code' || !content.data,
-        },
-        yAxis: {
-            type: 'TextRadioGroup',
+            type: 'BigIconRadioGroup',
             options: {
                 choices: [
-                    { value: 'record-count', label: 'Record count' },
-                    { value: 'field-summary', label: 'Field summary' },
+                    { icon: 'align-bottom', value: 'item-count', label: 'Item count' },
+                    { icon: 'align-left', value: 'field-summary', label: 'Field summary' },
                 ],
             },
             section: 'settings',
-            defaultValue: 'record-count',
-            hidden: content => content.dataType !== 'no-code' || !content.data,
+            defaultValue: 'item-count',
+            hidden: content => content.dataType !== 'guided' || !content.data,
         },
         dataYField: {
             label: 'Field',
@@ -225,7 +221,7 @@ export default {
             },
             section: 'settings',
             defaultValue: null,
-            hidden: content => content.dataType !== 'no-code' || !content.data || content.yAxis !== 'field-summary',
+            hidden: content => content.dataType !== 'guided' || !content.data || content.yAxis !== 'field-summary',
         },
         dataYFieldProperty: {
             label: 'Field property',
@@ -243,7 +239,7 @@ export default {
                 if (!Array.isArray(data) || !data.length) return true;
                 const field = _.get(data[0], content.dataYField);
                 return (
-                    content.dataType !== 'no-code' ||
+                    content.dataType !== 'guided' ||
                     !content.data ||
                     content.yAxis !== 'field-summary' ||
                     !Array.isArray(field) ||
@@ -274,7 +270,7 @@ export default {
             },
             section: 'settings',
             defaultValue: 'distinct',
-            hidden: content => content.dataType !== 'no-code' || !content.data || content.yAxis !== 'field-summary',
+            hidden: content => content.dataType !== 'guided' || !content.data || content.yAxis !== 'field-summary',
         },
         groupBy: {
             label: 'Group by',
@@ -287,9 +283,9 @@ export default {
             section: 'settings',
             defaultValue: null,
             hidden: content =>
-                content.dataType !== 'no-code' ||
+                content.dataType !== 'guided' ||
                 !content.data ||
-                (content.yAxis !== 'record-count' && content.aggregate !== 'distinct' && content.aggregate !== 'sum'),
+                (content.yAxis !== 'item-count' && content.aggregate !== 'distinct' && content.aggregate !== 'sum'),
         },
         groupByProperty: {
             label: 'Group by property',
@@ -307,7 +303,7 @@ export default {
                 if (!Array.isArray(data) || !data[0]) return true;
                 const field = _.get(data[0], content.groupBy);
                 return (
-                    content.dataType !== 'no-code' ||
+                    content.dataType !== 'guided' ||
                     !content.data ||
                     !Array.isArray(field) ||
                     !field.length ||
@@ -326,7 +322,7 @@ export default {
             },
             defaultValue: [],
             bindable: true,
-            hidden: content => content.dataType !== 'no-code' || !content.data,
+            hidden: content => content.dataType !== 'guided' || !content.data,
         },
     },
 };
