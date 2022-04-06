@@ -54,21 +54,32 @@ export default {
             let datasets = [];
 
             if (this.content.dataType === 'guided') {
-                labels = undefined;
-                const data =
+                let data =
                     (!this.content.data || Array.isArray(this.content.data)
                         ? this.content.data
                         : this.content.data.data) || [];
 
-                const groupBy = this.content.groupBy;
-                const groupByProperty = this.content.groupByProperty;
-                const dataXField = this.content.dataXField;
-                const dataXFieldProperty = this.content.dataXFieldProperty;
-                const dataYField =
-                    this.content.yAxis === 'item-count' ? this.content.dataXField : this.content.dataYField;
-                const dataYFieldProperty = this.content.dataYFieldProperty;
-                const aggregate = this.content.yAxis === 'item-count' ? 'item-count' : this.content.aggregate;
+                const yAxis = this.content.yAxis;
+                let dataXField = this.content.dataXField;
+                let dataXFieldProperty = this.content.dataXFieldProperty;
+                let dataYField = yAxis === 'item-count' ? this.content.dataXField : this.content.dataYField;
+                let dataYFieldProperty = this.content.dataYFieldProperty;
+                let groupBy = this.content.groupBy;
+                let groupByProperty = this.content.groupByProperty;
+                let aggregate = yAxis === 'item-count' ? 'item-count' : this.content.aggregate;
                 const colors = this.content.colors;
+
+                if (typeof data[0] !== 'object') {
+                    data = data.map(value => ({ value }));
+                    dataXField = 'value';
+                    dataYFieldProperty = undefined;
+                    dataYField = 'value';
+                    dataXFieldProperty = undefined;
+                    groupBy = undefined;
+                    groupByProperty = undefined;
+                    aggregate = 'item-count';
+                }
+
                 if (!groupBy) {
                     datasets = [{ label: dataXField, backgroundColor: colors[0], data: [] }];
                     if (!data.length || !Array.isArray(_.get(data[0], dataXField))) {
@@ -175,16 +186,16 @@ export default {
                     }));
                 }
 
+                // Remove duplicate X values
+                for (const dataset of datasets) {
+                    dataset.data = dataset.data.filter(
+                        (item, index) => dataset.data.findIndex(elem => item.x === elem.x) === index
+                    );
+                }
                 // Empty values
                 if (this.content.dataXEmpty === false) {
-                    for (const item of datasets) {
-                        item.data = item.data.filter(item => item.y && item.x);
-                    }
-                }
-                // Change axis
-                if (this.content.axis === 'y') {
-                    for (const item of datasets) {
-                        item.data = item.data.map(item => ({ x: item.y, y: item.x }));
+                    for (const dataset of datasets) {
+                        dataset.data = dataset.data.filter(item => item.y && item.x);
                     }
                 }
                 // Order by
@@ -198,9 +209,10 @@ export default {
                     });
                     item.data = item.data.map(item => ({ x: `${item.x}`, y: item.y }));
                 }
+                labels = [...new Set(datasets.map(dataset => dataset.data.map(elem => elem.x)).flat())];
             } else {
                 labels = this.content.labels;
-                datasets = this.content.datasets;
+                datasets = this.content.datasets || [];
             }
 
             return {

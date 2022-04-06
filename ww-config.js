@@ -125,7 +125,10 @@ export default {
         xAxisTitle: {
             label: 'X-axis',
             section: 'settings',
-            hidden: content => content.dataType !== 'guided' || !content.data,
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                return content.dataType !== 'guided' || !content.data || typeof data[0] !== 'object';
+            },
         },
         dataXField: {
             label: 'Field',
@@ -137,7 +140,10 @@ export default {
             },
             section: 'settings',
             defaultValue: null,
-            hidden: content => content.dataType !== 'guided' || !content.data,
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                return content.dataType !== 'guided' || !content.data || typeof data[0] !== 'object';
+            },
         },
         dataXFieldProperty: {
             label: 'Field property',
@@ -157,6 +163,7 @@ export default {
                 return (
                     content.dataType !== 'guided' ||
                     !content.data ||
+                    typeof data[0] !== 'object' ||
                     !Array.isArray(field) ||
                     !field.length ||
                     typeof field[0] !== 'object'
@@ -209,7 +216,10 @@ export default {
             },
             section: 'settings',
             defaultValue: 'item-count',
-            hidden: content => content.dataType !== 'guided' || !content.data,
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                return content.dataType !== 'guided' || !content.data || typeof data[0] !== 'object';
+            },
         },
         dataYField: {
             label: 'Field',
@@ -221,7 +231,15 @@ export default {
             },
             section: 'settings',
             defaultValue: null,
-            hidden: content => content.dataType !== 'guided' || !content.data || content.yAxis !== 'field-summary',
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                return (
+                    content.dataType !== 'guided' ||
+                    !content.data ||
+                    typeof data[0] !== 'object' ||
+                    content.yAxis !== 'field-summary'
+                );
+            },
         },
         dataYFieldProperty: {
             label: 'Field property',
@@ -241,6 +259,7 @@ export default {
                 return (
                     content.dataType !== 'guided' ||
                     !content.data ||
+                    typeof data[0] !== 'object' ||
                     content.yAxis !== 'field-summary' ||
                     !Array.isArray(field) ||
                     !field.length ||
@@ -270,7 +289,15 @@ export default {
             },
             section: 'settings',
             defaultValue: 'distinct',
-            hidden: content => content.dataType !== 'guided' || !content.data || content.yAxis !== 'field-summary',
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                return (
+                    content.dataType !== 'guided' ||
+                    !content.data ||
+                    typeof data[0] !== 'object' ||
+                    content.yAxis !== 'field-summary'
+                );
+            },
         },
         groupBy: {
             label: 'Group by',
@@ -282,10 +309,15 @@ export default {
             },
             section: 'settings',
             defaultValue: null,
-            hidden: content =>
-                content.dataType !== 'guided' ||
-                !content.data ||
-                (content.yAxis !== 'item-count' && content.aggregate !== 'distinct' && content.aggregate !== 'sum'),
+            hidden: content => {
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                return (
+                    content.dataType !== 'guided' ||
+                    !content.data ||
+                    typeof data[0] !== 'object' ||
+                    (content.yAxis !== 'item-count' && content.aggregate !== 'distinct' && content.aggregate !== 'sum')
+                );
+            },
         },
         groupByProperty: {
             label: 'Group by property',
@@ -305,6 +337,7 @@ export default {
                 return (
                     content.dataType !== 'guided' ||
                     !content.data ||
+                    typeof data[0] !== 'object' ||
                     !Array.isArray(field) ||
                     !field.length ||
                     typeof field[0] !== 'object'
