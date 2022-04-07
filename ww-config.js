@@ -1,3 +1,12 @@
+function isDataValid(data) {
+    const cData = (!data || Array.isArray(data) ? data : data.data) || null;
+    return data && Array.isArray(cData);
+}
+function isDataArrayObject(data) {
+    const cData = (!data || Array.isArray(data) ? data : data.data) || null;
+    return data && Array.isArray(cData) && typeof cData[0] === 'object';
+}
+
 export default {
     editor: {
         label: 'Chart - Bar',
@@ -32,6 +41,24 @@ export default {
             bindable: true,
             responsive: true,
             defaultValue: 'center',
+        },
+        legendSize: {
+            label: 'Legend size',
+            type: 'Length',
+            options: {
+                unitChoices: [{ value: 'px', label: 'px', min: 0, max: 50 }],
+            },
+            defaultValue: '12px',
+        },
+        legendColor: {
+            label: 'Legend color',
+            type: 'Color',
+            options: { nullable: true },
+        },
+        gridColor: {
+            label: 'Grid color',
+            type: 'Color',
+            options: { nullable: true },
         },
         axis: {
             label: 'Axis',
@@ -108,10 +135,7 @@ export default {
             hidden: content => content.dataType !== 'advanced',
         },
         data: {
-            label: {
-                en: 'Data',
-                fr: 'Data',
-            },
+            label: 'Data',
             type: 'Info',
             options: {
                 text: 'Bind collection data',
@@ -122,13 +146,17 @@ export default {
             defaultValue: null,
             hidden: content => content.dataType !== 'guided',
         },
+        dataError: {
+            type: 'Info',
+            options: { text: '⚠️ Invalid value' },
+            section: 'settings',
+            hidden: content => !(content.dataType === 'guided' && content.data && !isDataValid(content.data)),
+        },
         xAxisTitle: {
             label: 'X-axis',
             section: 'settings',
-            hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
-                return content.dataType !== 'guided' || !content.data || typeof data[0] !== 'object';
-            },
+            hidden: content =>
+                !(content.dataType === 'guided' && isDataValid(content.data) && isDataArrayObject(content.data)),
         },
         dataXField: {
             label: 'Field',
@@ -140,10 +168,8 @@ export default {
             },
             section: 'settings',
             defaultValue: null,
-            hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
-                return content.dataType !== 'guided' || !content.data || typeof data[0] !== 'object';
-            },
+            hidden: content =>
+                !(content.dataType === 'guided' && isDataValid(content.data) && isDataArrayObject(content.data)),
         },
         dataXFieldProperty: {
             label: 'Field property',
@@ -157,16 +183,16 @@ export default {
             defaultValue: null,
             section: 'settings',
             hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || null;
                 if (!Array.isArray(data) || !data[0]) return true;
                 const field = _.get(data[0], content.dataXField);
-                return (
-                    content.dataType !== 'guided' ||
-                    !content.data ||
-                    typeof data[0] !== 'object' ||
-                    !Array.isArray(field) ||
-                    !field.length ||
-                    typeof field[0] !== 'object'
+                return !(
+                    content.dataType === 'guided' &&
+                    isDataValid(content.data) &&
+                    isDataArrayObject(content.data) &&
+                    Array.isArray(field) &&
+                    field.length &&
+                    typeof field[0] === 'object'
                 );
             },
         },
@@ -181,7 +207,7 @@ export default {
             },
             section: 'settings',
             defaultValue: 'x',
-            hidden: content => content.dataType !== 'guided' || !content.data,
+            hidden: content => !(content.dataType === 'guided' && isDataValid(content.data)),
         },
         dataDirection: {
             type: 'TextRadioGroup',
@@ -193,20 +219,17 @@ export default {
             },
             section: 'settings',
             defaultValue: 'ASC',
-            hidden: content => content.dataType !== 'guided' || !content.data,
+            hidden: content => !(content.dataType === 'guided' && isDataValid(content.data)),
         },
         dataXEmpty: {
             label: 'Include empty values',
             type: 'OnOff',
             section: 'settings',
             defaultValue: false,
-            hidden: content => content.dataType !== 'guided' || !content.data,
+            hidden: content => !(content.dataType === 'guided' && isDataValid(content.data)),
         },
         yAxis: {
-            label: {
-                en: 'Y-axis',
-                fr: 'Y-axis',
-            },
+            label: 'Y-axis',
             type: 'BigIconRadioGroup',
             options: {
                 choices: [
@@ -216,10 +239,8 @@ export default {
             },
             section: 'settings',
             defaultValue: 'item-count',
-            hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
-                return content.dataType !== 'guided' || !content.data || typeof data[0] !== 'object';
-            },
+            hidden: content =>
+                !(content.dataType === 'guided' && isDataValid(content.data) && isDataArrayObject(content.data)),
         },
         dataYField: {
             label: 'Field',
@@ -231,15 +252,13 @@ export default {
             },
             section: 'settings',
             defaultValue: null,
-            hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
-                return (
-                    content.dataType !== 'guided' ||
-                    !content.data ||
-                    typeof data[0] !== 'object' ||
-                    content.yAxis !== 'field-summary'
-                );
-            },
+            hidden: content =>
+                !(
+                    content.dataType === 'guided' &&
+                    content.yAxis === 'field-summary' &&
+                    isDataValid(content.data) &&
+                    isDataArrayObject(content.data)
+                ),
         },
         dataYFieldProperty: {
             label: 'Field property',
@@ -253,17 +272,17 @@ export default {
             defaultValue: null,
             section: 'settings',
             hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || null;
                 if (!Array.isArray(data) || !data.length) return true;
                 const field = _.get(data[0], content.dataYField);
-                return (
-                    content.dataType !== 'guided' ||
-                    !content.data ||
-                    typeof data[0] !== 'object' ||
-                    content.yAxis !== 'field-summary' ||
-                    !Array.isArray(field) ||
-                    !field.length ||
-                    typeof field[0] !== 'object'
+                return !(
+                    content.dataType === 'guided' &&
+                    content.yAxis === 'field-summary' &&
+                    isDataValid(content.data) &&
+                    isDataArrayObject(content.data) &&
+                    Array.isArray(field) &&
+                    field.length &&
+                    typeof field[0] === 'object'
                 );
             },
         },
@@ -289,15 +308,13 @@ export default {
             },
             section: 'settings',
             defaultValue: 'distinct',
-            hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
-                return (
-                    content.dataType !== 'guided' ||
-                    !content.data ||
-                    typeof data[0] !== 'object' ||
-                    content.yAxis !== 'field-summary'
-                );
-            },
+            hidden: content =>
+                !(
+                    content.dataType === 'guided' &&
+                    content.yAxis === 'field-summary' &&
+                    isDataValid(content.data) &&
+                    isDataArrayObject(content.data)
+                ),
         },
         groupBy: {
             label: 'Group by',
@@ -309,15 +326,15 @@ export default {
             },
             section: 'settings',
             defaultValue: null,
-            hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
-                return (
-                    content.dataType !== 'guided' ||
-                    !content.data ||
-                    typeof data[0] !== 'object' ||
-                    (content.yAxis !== 'item-count' && content.aggregate !== 'distinct' && content.aggregate !== 'sum')
-                );
-            },
+            hidden: content =>
+                !(
+                    content.dataType === 'guided' &&
+                    (content.yAxis === 'item-count' ||
+                        content.aggregate === 'distinct' ||
+                        content.aggregate === 'sum') &&
+                    isDataValid(content.data) &&
+                    isDataArrayObject(content.data)
+                ),
         },
         groupByProperty: {
             label: 'Group by property',
@@ -331,16 +348,16 @@ export default {
             defaultValue: null,
             section: 'settings',
             hidden: content => {
-                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
+                const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || null;
                 if (!Array.isArray(data) || !data[0]) return true;
                 const field = _.get(data[0], content.groupBy);
-                return (
-                    content.dataType !== 'guided' ||
-                    !content.data ||
-                    typeof data[0] !== 'object' ||
-                    !Array.isArray(field) ||
-                    !field.length ||
-                    typeof field[0] !== 'object'
+                return !(
+                    content.dataType === 'guided' &&
+                    isDataValid(content.data) &&
+                    isDataArrayObject(content.data) &&
+                    Array.isArray(field) &&
+                    field.length &&
+                    typeof field[0] === 'object'
                 );
             },
         },
@@ -355,7 +372,7 @@ export default {
             },
             defaultValue: [],
             bindable: true,
-            hidden: content => content.dataType !== 'guided' || !content.data,
+            hidden: content => !(content.dataType === 'guided' && isDataValid(content.data)),
         },
     },
 };

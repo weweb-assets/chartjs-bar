@@ -81,7 +81,13 @@ export default {
                 }
 
                 if (!groupBy) {
-                    datasets = [{ label: dataXField, backgroundColor: colors[0], data: [] }];
+                    datasets = [
+                        {
+                            label: `${dataXField}`.split("['").pop().replace("']", ''),
+                            backgroundColor: colors[0],
+                            data: [],
+                        },
+                    ];
                     if (!data.length || !Array.isArray(_.get(data[0], dataXField))) {
                         datasets[0].data = data.map(item => ({
                             x: _.get(item, dataXField),
@@ -152,7 +158,7 @@ export default {
                         ),
                     ];
                     datasets = groupByValues.map((groupByValue, index) => ({
-                        label: groupByValue,
+                        label: `${groupByValue}`.split("['").pop().replace("']", ''),
                         backgroundColor: colors[index % colors.length],
                         data: t.map(elem => ({
                             x: elem,
@@ -228,7 +234,11 @@ export default {
                     plugins: {
                         legend: {
                             position: this.content.legendPosition,
-                            labels: { usePointStyle: true },
+                            labels: {
+                                usePointStyle: true,
+                                color: this.content.legendColor,
+                                font: { size: parseInt(this.content.legendSize) },
+                            },
                             onHover: this.handleHover,
                             onLeave: this.handleLeave,
                         },
@@ -238,9 +248,19 @@ export default {
                     },
                     scales: {
                         x: {
+                            grid: { color: this.content.gridColor, borderColor: this.content.gridColor },
+                            ticks: {
+                                color: this.content.legendColor,
+                                font: { size: parseInt(this.content.legendSize) },
+                            },
                             stacked: this.content.stacked,
                         },
                         y: {
+                            grid: { color: this.content.gridColor, borderColor: this.content.gridColor },
+                            ticks: {
+                                color: this.content.legendColor,
+                                font: { size: parseInt(this.content.legendSize) },
+                            },
                             stacked: this.content.stacked,
                             beginAtZero: this.content.startAtZero,
                         },
@@ -266,6 +286,25 @@ export default {
         },
         'content.legendAlignement'() {
             this.chartInstance.options.plugins.legend.align = this.content.legendAlignement;
+            this.chartInstance.update();
+        },
+        'content.legendColor'() {
+            this.chartInstance.options.plugins.legend.labels.color = this.content.legendColor;
+            this.chartInstance.options.scales.x.ticks.color = this.content.legendColor;
+            this.chartInstance.options.scales.y.ticks.color = this.content.legendColor;
+            this.chartInstance.update();
+        },
+        'content.legendSize'() {
+            this.chartInstance.options.plugins.legend.labels.font.size = parseInt(this.content.legendSize);
+            this.chartInstance.options.scales.x.ticks.font.size = parseInt(this.content.legendSize);
+            this.chartInstance.options.scales.y.ticks.font.size = parseInt(this.content.legendSize);
+            this.chartInstance.update();
+        },
+        'content.gridColor'() {
+            this.chartInstance.options.scales.x.grid.borderColor = this.content.gridColor;
+            this.chartInstance.options.scales.x.grid.color = this.content.gridColor;
+            this.chartInstance.options.scales.y.grid.borderColor = this.content.gridColor;
+            this.chartInstance.options.scales.y.grid.color = this.content.gridColor;
             this.chartInstance.update();
         },
         'content.axis'() {
@@ -300,6 +339,10 @@ export default {
         this.chartInstance.destroy();
     },
     methods: {
+        initChart() {
+            const element = this.$el.querySelector('.chartjs-bar');
+            this.chartInstance = new Chart(element, this.config);
+        },
         aggregate(operator, data) {
             if (!data) return undefined;
             switch (operator) {
@@ -318,10 +361,6 @@ export default {
                 case 'max':
                     return Math.max(...[data].flat());
             }
-        },
-        initChart() {
-            const element = this.$el.querySelector('.chartjs-bar');
-            this.chartInstance = new Chart(element, this.config);
         },
         median(arr) {
             const mid = Math.floor(arr.length / 2),
