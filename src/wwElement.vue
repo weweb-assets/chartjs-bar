@@ -234,13 +234,12 @@ export default {
                     plugins: {
                         legend: {
                             position: this.content.legendPosition,
+                            align: this.content.legendAlignement,
                             labels: {
                                 usePointStyle: true,
                                 color: this.content.legendColor,
                                 font: { size: parseInt(this.content.legendSize) },
                             },
-                            onHover: this.handleHover,
-                            onLeave: this.handleLeave,
                         },
                     },
                     interaction: {
