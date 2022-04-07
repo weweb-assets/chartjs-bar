@@ -83,7 +83,7 @@ export default {
                 if (!groupBy) {
                     datasets = [
                         {
-                            label: `${dataXField}`.split("['").pop().replace("']", ''),
+                            label: `${dataYField}`.split("['").pop().replace("']", ''),
                             backgroundColor: colors[0],
                             data: [],
                         },
@@ -94,7 +94,7 @@ export default {
                             y: this.aggregate(
                                 aggregate,
                                 data
-                                    .filter(elem => _.get(elem, dataYField) === _.get(item, dataYField))
+                                    .filter(elem => _.get(elem, dataXField) === _.get(item, dataXField))
                                     .map(elem => _.get(elem, dataYField))
                             ),
                         }));
