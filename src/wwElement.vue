@@ -205,15 +205,18 @@ export default {
                     }
                 }
                 // Order by
-                for (const item of datasets) {
-                    item.data.sort((a, b) => {
-                        const field = this.content.dataOrderBy;
-                        return (
-                            (typeof a[field] === 'string' ? a[field].localeCompare(b[field]) : a[field] - b[field]) *
-                            (this.content.dataDirection === 'DESC' ? -1 : 1)
-                        );
-                    });
-                    item.data = item.data.map(item => ({ x: `${item.x}`, y: item.y }));
+                if (this.content.dataOrderBy !== 'default') {
+                    for (const item of datasets) {
+                        item.data.sort((a, b) => {
+                            const field = this.content.dataOrderBy;
+                            return (
+                                (typeof a[field] === 'string'
+                                    ? a[field].localeCompare(b[field])
+                                    : a[field] - b[field]) * (this.content.dataDirection === 'DESC' ? -1 : 1)
+                            );
+                        });
+                        item.data = item.data.map(item => ({ x: `${item.x}`, y: item.y }));
+                    }
                 }
                 labels = [...new Set(datasets.map(dataset => dataset.data.map(elem => elem.x)).flat())];
             } else {
@@ -322,6 +325,20 @@ export default {
             // eslint-disable-next-line vue/require-explicit-emits
             this.$emit('update:content:effect', { dataYFieldProperty: null });
         },
+        'content.dataYFieldProperty'() {
+            const data =
+                (!this.content.data || Array.isArray(this.content.data) ? this.content.data : this.content.data.data) ||
+                [];
+            let field = _.get(data[0], this.content.dataYField);
+            const isArray = Array.isArray(field);
+            if (Array.isArray(field) && field.length)
+                field = _.get(field[0], this.content.dataYFieldProperty, field[0]);
+            const isNumber = Number.isFinite(data[0] && this.content.dataYField && field);
+            if (isNumber) {
+                // eslint-disable-next-line vue/require-explicit-emits
+                this.$emit('update:content:effect', { aggregate: isArray ? 'sum' : 'value' });
+            }
+        },
         'content.dataXField'() {
             // eslint-disable-next-line vue/require-explicit-emits
             this.$emit('update:content:effect', { dataXFieldProperty: null });
@@ -349,6 +366,8 @@ export default {
                     return [data].flat().length;
                 case 'distinct':
                     return [...new Set([data].flat())].length;
+                case 'value':
+                    return data;
                 case 'sum':
                     return this.sum([data].flat());
                 case 'average':

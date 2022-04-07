@@ -88,7 +88,7 @@ export default {
             defaultValue: true,
         },
         dataType: {
-            label: 'Configuration',
+            label: 'Mode',
             type: 'TextSelect',
             options: {
                 options: [
@@ -201,12 +201,13 @@ export default {
             type: 'TextRadioGroup',
             options: {
                 choices: [
+                    { value: 'default', label: 'Default' },
                     { value: 'x', label: 'X value' },
                     { value: 'y', label: 'Y value' },
                 ],
             },
             section: 'settings',
-            defaultValue: 'x',
+            defaultValue: 'default',
             hidden: content => !(content.dataType === 'guided' && isDataValid(content.data)),
         },
         dataDirection: {
@@ -219,7 +220,8 @@ export default {
             },
             section: 'settings',
             defaultValue: 'ASC',
-            hidden: content => !(content.dataType === 'guided' && isDataValid(content.data)),
+            hidden: content =>
+                !(content.dataType === 'guided' && content.dataType !== 'default' && isDataValid(content.data)),
         },
         dataXEmpty: {
             label: 'Include empty values',
@@ -292,12 +294,14 @@ export default {
             options: content => {
                 const data = (!content.data || Array.isArray(content.data) ? content.data : content.data.data) || [];
                 let field = _.get(data[0], content.dataYField);
-                if (Array.isArray(field) && field.length) field = _.get(field[0], content.dataYFieldProperty);
+                const isArray = Array.isArray(field);
+                if (Array.isArray(field) && field.length) field = _.get(field[0], content.dataYFieldProperty, field[0]);
                 const isNumber = Number.isFinite(data[0] && content.dataYField && field);
                 return {
                     placeholder: 'Select',
                     options: [
                         { value: 'distinct', label: 'Distinct' },
+                        isNumber && !isArray ? { value: 'value', label: 'Value' } : null,
                         isNumber ? { value: 'sum', label: 'Sum' } : null,
                         isNumber ? { value: 'average', label: 'Average' } : null,
                         isNumber ? { value: 'median', label: 'Median' } : null,
@@ -331,6 +335,7 @@ export default {
                     content.dataType === 'guided' &&
                     (content.yAxis === 'item-count' ||
                         content.aggregate === 'distinct' ||
+                        content.aggregate === 'value' ||
                         content.aggregate === 'sum') &&
                     isDataValid(content.data) &&
                     isDataArrayObject(content.data)
