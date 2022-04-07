@@ -148,7 +148,7 @@ export default {
         },
         dataError: {
             type: 'Info',
-            options: { text: '⚠️ Invalid value' },
+            options: { text: '⚠️ Invalid value. Data must be an array (or a collection).' },
             section: 'settings',
             hidden: content => !(content.dataType === 'guided' && content.data && !isDataValid(content.data)),
         },
