@@ -367,7 +367,7 @@ export default {
                 case 'distinct':
                     return [...new Set([data].flat())].length;
                 case 'value':
-                    return data;
+                    return [data].flat()[0];
                 case 'sum':
                     return this.sum([data].flat());
                 case 'average':

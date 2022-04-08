@@ -221,7 +221,7 @@ export default {
             section: 'settings',
             defaultValue: 'ASC',
             hidden: content =>
-                !(content.dataType === 'guided' && content.dataType !== 'default' && isDataValid(content.data)),
+                !(content.dataType === 'guided' && content.dataOrderBy !== 'default' && isDataValid(content.data)),
         },
         dataXEmpty: {
             label: 'Include empty values',
