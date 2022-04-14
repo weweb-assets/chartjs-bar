@@ -235,8 +235,8 @@ export default {
             type: 'BigIconRadioGroup',
             options: {
                 choices: [
-                    { icon: 'align-bottom', value: 'item-count', label: 'Item count' },
-                    { icon: 'align-left', value: 'field-summary', label: 'Field summary' },
+                    { icon: 'sum', value: 'item-count', label: 'Item count' },
+                    { icon: 'field-sumary', value: 'field-summary', label: 'Field summary' },
                 ],
             },
             section: 'settings',
