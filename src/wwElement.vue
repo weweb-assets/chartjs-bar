@@ -283,6 +283,10 @@ export default {
             this.chartInstance.data.labels = this.config.data.labels;
             this.chartInstance.update();
         },
+        'content.isLegend'() {
+            this.chartInstance.options.plugins.legend.display = this.content.isLegend;
+            this.chartInstance.update();
+        },
         'content.legendPosition'() {
             this.chartInstance.options.plugins.legend.position = this.content.legendPosition;
             this.chartInstance.update();
