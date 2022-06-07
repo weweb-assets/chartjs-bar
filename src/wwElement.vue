@@ -236,6 +236,7 @@ export default {
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
+                            display: this.content.isLegend,
                             position: this.content.legendPosition,
                             align: this.content.legendAlignement,
                             labels: {
