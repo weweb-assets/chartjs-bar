@@ -13,6 +13,13 @@ export default {
         icon: 'fontawesome/regular/chart-bar',
     },
     properties: {
+        isLegend: {
+            label: 'Legend',
+            type: 'OnOff',
+            bindable: true,
+            responsive: true,
+            defaultValue: true,
+        },
         legendPosition: {
             label: 'Legend position',
             type: 'TextSelect',
@@ -27,6 +34,7 @@ export default {
             bindable: true,
             responsive: true,
             defaultValue: 'top',
+            hidden: content => !content.isLegend,
         },
         legendAlignement: {
             label: 'Legend alignment',
@@ -41,6 +49,7 @@ export default {
             bindable: true,
             responsive: true,
             defaultValue: 'center',
+            hidden: content => !content.isLegend,
         },
         legendSize: {
             label: 'Legend size',
@@ -49,11 +58,13 @@ export default {
                 unitChoices: [{ value: 'px', label: 'px', min: 0, max: 50 }],
             },
             defaultValue: '12px',
+            hidden: content => !content.isLegend,
         },
         legendColor: {
             label: 'Legend color',
             type: 'Color',
             options: { nullable: true },
+            hidden: content => !content.isLegend,
         },
         gridColor: {
             label: 'Grid color',
