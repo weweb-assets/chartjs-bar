@@ -385,13 +385,13 @@ export default {
                 item: {
                     type: 'Color',
                 },
+                getItemLabel(_, index) {
+                    return `Color ${index + 1}`;
+                },
             },
             defaultValue: [],
             bindable: true,
             hidden: content => !(content.dataType === 'guided' && isDataValid(content.data)),
-            getItemLabel(_, index) {
-                return `Color ${index + 1}`;
-            },
         },
     },
 };
