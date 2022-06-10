@@ -389,6 +389,9 @@ export default {
             defaultValue: [],
             bindable: true,
             hidden: content => !(content.dataType === 'guided' && isDataValid(content.data)),
+            getItemLabel(_, index) {
+                return `Color ${index + 1}`;
+            },
         },
     },
 };
