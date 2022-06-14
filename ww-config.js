@@ -11,6 +11,26 @@ export default {
     editor: {
         label: 'Chart - Bar',
         icon: 'fontawesome/regular/chart-bar',
+        customStylePropertiesOrder: [
+            ['legendPosition', 'legendAlignement', 'legendColor', 'legendSize', 'legendColor'],
+            ['gridColor', 'axis', 'stacked', 'startAtZero'],
+        ],
+        customSettingsPropertiesOrder: [
+            'dataType',
+            ['labels', 'datasets'],
+            'data',
+            [
+                'dataError',
+                'xAxisTitle',
+                'dataXField',
+                'dataXFieldProperty',
+                'dataOrderBy',
+                'dataDirection',
+                'dataXEmpty',
+            ],
+            ['yAxis', 'dataYField', 'dataYFieldProperty', 'aggregate', 'groupBy', 'groupByProperty'],
+            ['colors'],
+        ],
     },
     properties: {
         legendPosition: {
