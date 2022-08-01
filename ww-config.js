@@ -402,7 +402,7 @@ export default {
             type: 'Array',
             section: 'settings',
             options: {
-                expendable: true,
+                expandable: true,
                 item: {
                     type: 'Color',
                 },
