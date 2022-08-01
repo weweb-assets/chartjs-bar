@@ -12,8 +12,8 @@ export default {
         label: 'Chart - Bar',
         icon: 'fontawesome/regular/chart-bar',
         customStylePropertiesOrder: [
-            ['legendPosition', 'legendAlignement', 'legendColor', 'legendSize', 'legendColor'],
-            ['gridColor', 'axis', 'stacked', 'startAtZero'],
+            ['isLegend', 'legendPosition', 'legendAlignement', 'legendSize', 'legendColor'],
+            ['axis', 'stacked', 'startAtZero', 'gridColor'],
         ],
         customSettingsPropertiesOrder: [
             'dataType',
@@ -41,7 +41,7 @@ export default {
             defaultValue: true,
         },
         legendPosition: {
-            label: 'Legend position',
+            label: 'Position',
             type: 'TextSelect',
             options: {
                 options: [
@@ -57,7 +57,7 @@ export default {
             hidden: content => !content.isLegend,
         },
         legendAlignement: {
-            label: 'Legend alignment',
+            label: 'Alignment',
             type: 'TextSelect',
             options: {
                 options: [
@@ -72,7 +72,7 @@ export default {
             hidden: content => !content.isLegend,
         },
         legendSize: {
-            label: 'Legend size',
+            label: 'Size',
             type: 'Length',
             options: {
                 unitChoices: [{ value: 'px', label: 'px', min: 0, max: 50 }],
@@ -81,7 +81,7 @@ export default {
             hidden: content => !content.isLegend,
         },
         legendColor: {
-            label: 'Legend color',
+            label: 'Color',
             type: 'Color',
             options: { nullable: true },
             hidden: content => !content.isLegend,
@@ -233,8 +233,8 @@ export default {
             options: {
                 choices: [
                     { value: 'default', label: 'Default' },
-                    { value: 'x', label: 'X value' },
-                    { value: 'y', label: 'Y value' },
+                    { value: 'x', label: 'X' },
+                    { value: 'y', label: 'Y' },
                 ],
             },
             section: 'settings',
@@ -402,6 +402,7 @@ export default {
             type: 'Array',
             section: 'settings',
             options: {
+                expendable: true,
                 item: {
                     type: 'Color',
                 },
