@@ -14,7 +14,7 @@ function isDataArrayObject(data) {
 export default {
     editor: {
         label: 'Chart - Bar',
-        icon: 'fontawesome/regular/chart-bar',
+        icon: 'logos/chartjs',
         customStylePropertiesOrder: [
             ['isLegend', 'legendPosition', 'legendAlignement', 'legendSize', 'legendColor'],
             ['axis', 'stacked', 'startAtZero', 'gridColor'],
