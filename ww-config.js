@@ -106,6 +106,7 @@ export default {
             label: 'Grid color',
             type: 'Color',
             options: { nullable: true },
+            hidden: content => content.dataType === 'advanced',
         },
         axis: {
             label: 'Axis',
@@ -119,6 +120,7 @@ export default {
             bindable: true,
             responsive: true,
             defaultValue: 'x',
+            hidden: content => content.dataType === 'advanced',
             /* wwEditor:start */
             bindingValidation: {
                 type: 'string',
@@ -132,6 +134,7 @@ export default {
             bindable: true,
             responsive: true,
             defaultValue: false,
+            hidden: content => content.dataType === 'advanced',
             /* wwEditor:start */
             bindingValidation: {
                 type: 'boolean',
@@ -145,6 +148,7 @@ export default {
             bindable: true,
             responsive: true,
             defaultValue: true,
+            hidden: content => content.dataType === 'advanced',
             /* wwEditor:start */
             bindingValidation: {
                 type: 'boolean',
