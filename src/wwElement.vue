@@ -134,8 +134,8 @@ export default {
                     ];
                     if (!data.length || !Array.isArray(_.get(data[0], dataXField))) {
                         datasets[0].data = data.map(item => ({
-                            x: _.get(item, dataXField),
-                            y: this.aggregate(
+                            [this.content.axis]: _.get(item, dataXField),
+                            [this.content.axis === 'x' ? 'y' : 'x']: this.aggregate(
                                 aggregate,
                                 data
                                     .filter(elem => _.get(elem, dataXField) === _.get(item, dataXField))
@@ -156,8 +156,8 @@ export default {
                             ),
                         ];
                         datasets[0].data = arrayValues.map(arrayValue => ({
-                            x: arrayValue,
-                            y: this.aggregate(
+                            [this.content.axis]: arrayValue,
+                            [this.content.axis === 'x' ? 'y' : 'x']: this.aggregate(
                                 aggregate,
                                 data
                                     .filter(item => {
@@ -205,8 +205,8 @@ export default {
                         label: `${groupByValue}`.split("['").pop().replace("']", ''),
                         backgroundColor: colors[index % colors.length],
                         data: t.map(elem => ({
-                            x: elem,
-                            y: this.aggregate(
+                            [this.content.axis]: elem,
+                            [this.content.axis === 'x' ? 'y' : 'x']: this.aggregate(
                                 aggregate,
                                 data
                                     .filter(item => {
@@ -262,7 +262,9 @@ export default {
                         item.data = item.data.map(item => ({ x: `${item.x}`, y: item.y }));
                     }
                 }
-                labels = [...new Set(datasets.map(dataset => dataset.data.map(elem => elem.x)).flat())];
+                labels = [
+                    ...new Set(datasets.map(dataset => dataset.data.map(elem => elem[this.content.axis])).flat()),
+                ];
             } else {
                 labels = this.content.labels;
                 datasets = this.content.datasets || [];
