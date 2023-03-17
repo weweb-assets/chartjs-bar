@@ -196,7 +196,6 @@ export default {
             responsive: true,
             states: true,
             section: 'settings',
-            bindable: 'list',
             defaultValue: ['Tatooine', 'Coruscant', 'Kashyyyk', 'Dagobah', 'Bespin', 'Endor', 'Hoth'],
             hidden: content => content.dataType !== 'advanced',
             /* wwEditor:start */
