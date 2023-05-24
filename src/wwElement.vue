@@ -22,6 +22,7 @@ import {
     Tooltip,
     SubTitle,
 } from 'chart.js';
+import 'chartjs-adapter-date-fns';
 
 Chart.register(
     BarElement,
