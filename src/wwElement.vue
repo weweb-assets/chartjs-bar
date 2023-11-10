@@ -279,13 +279,12 @@ export default {
                     datasets,
                 },
                 options: {
-                    ...this.options,
                     onClick: e => {
                         const position = getRelativePosition(e, this.chartInstance);
                         const points = this.chartInstance.getElementsAtEventForMode(
                             e,
-                            this.config.options.interaction || 'nearest',
-                            { intersect: true },
+                            this.options?.interaction?.mode || 'nearest',
+                            { intersect: this.options?.interaction?.intersect ?? true },
                             true
                         );
 
@@ -314,6 +313,7 @@ export default {
                             },
                         });
                     },
+                    ...this.options,
                 },
             };
         },
