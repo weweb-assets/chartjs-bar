@@ -23,6 +23,7 @@ import {
     SubTitle,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import { getRelativePosition } from 'chart.js/helpers';
 
 Chart.register(
     BarElement,
@@ -277,7 +278,43 @@ export default {
                     labels,
                     datasets,
                 },
-                options: this.options,
+                options: {
+                    onClick: e => {
+                        const position = getRelativePosition(e, this.chartInstance);
+                        const points = this.chartInstance.getElementsAtEventForMode(
+                            e,
+                            this.options?.interaction?.mode || 'nearest',
+                            { intersect: this.options?.interaction?.intersect ?? true },
+                            true
+                        );
+
+                        // Substitute the appropriate scale IDs
+                        const dataX = this.chartInstance.scales.x.getValueForPixel(position.x);
+                        const dataY = this.chartInstance.scales.y.getValueForPixel(position.y);
+                        this.$emit('trigger-event', {
+                            name: 'chart:click',
+                            event: {
+                                dataX,
+                                dataY,
+                                position,
+                                points: points.map(point => ({
+                                    datasetLabel: this.chartInstance.data.datasets[point.datasetIndex].label,
+                                    label: this.chartInstance.data.labels[point.index],
+                                    value:
+                                        typeof this.chartInstance.data.datasets[point.datasetIndex].data[
+                                            point.index
+                                        ] === 'object'
+                                            ? this.chartInstance.data.datasets[point.datasetIndex].data[point.index][
+                                                  this.content.axis === 'x' ? 'y' : 'x'
+                                              ]
+                                            : this.chartInstance.data.datasets[point.datasetIndex].data[point.index],
+                                    ...point,
+                                })),
+                            },
+                        });
+                    },
+                    ...this.options,
+                },
             };
         },
     },
