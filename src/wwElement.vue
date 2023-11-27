@@ -73,7 +73,7 @@ export default {
                 },
                 scales: {
                     x: {
-                        grid: { color: this.content.gridColor, borderColor: this.content.gridColor },
+                        grid: { color: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor, borderColor: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor },
                         ticks: {
                             color: wwLib.getStyleFromToken(this.content.axisColor) || this.content.axisColor,
                             font: { size: parseInt(this.content.legendSize) },
@@ -81,7 +81,7 @@ export default {
                         stacked: this.content.stacked,
                     },
                     y: {
-                        grid: { color: this.content.gridColor, borderColor: this.content.gridColor },
+                        grid: { color: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor, borderColor: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor },
                         ticks: {
                             color: wwLib.getStyleFromToken(this.content.axisColor) || this.content.axisColor,
                             font: { size: parseInt(this.content.legendSize) },
@@ -366,10 +366,10 @@ export default {
             this.chartInstance.update();
         },
         'content.gridColor'() {
-            this.chartInstance.options.scales.x.grid.borderColor = this.content.gridColor;
-            this.chartInstance.options.scales.x.grid.color = this.content.gridColor;
-            this.chartInstance.options.scales.y.grid.borderColor = this.content.gridColor;
-            this.chartInstance.options.scales.y.grid.color = this.content.gridColor;
+            this.chartInstance.options.scales.x.grid.borderColor = wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
+            this.chartInstance.options.scales.x.grid.color = wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
+            this.chartInstance.options.scales.y.grid.borderColor = wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
+            this.chartInstance.options.scales.y.grid.color = wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
             this.chartInstance.update();
         },
         'content.axis'() {
