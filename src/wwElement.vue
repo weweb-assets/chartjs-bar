@@ -75,7 +75,7 @@ export default {
                     x: {
                         grid: { color: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor, borderColor: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor },
                         ticks: {
-                            color: wwLib.getStyleFromToken(this.content.axisColor) || this.content.axisColor,
+                            color: wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor,
                             font: { size: parseInt(this.content.legendSize) },
                         },
                         stacked: this.content.stacked,
@@ -83,7 +83,7 @@ export default {
                     y: {
                         grid: { color: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor, borderColor: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor },
                         ticks: {
-                            color: wwLib.getStyleFromToken(this.content.axisColor) || this.content.axisColor,
+                            color: wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor,
                             font: { size: parseInt(this.content.legendSize) },
                         },
                         stacked: this.content.stacked,
@@ -354,9 +354,9 @@ export default {
             this.chartInstance.options.plugins.legend.labels.color = wwLib.getStyleFromToken(this.content.legendColor) || this.content.legendColor;
             this.chartInstance.update();
         },
-        'content.axisColor'() {
-            this.chartInstance.options.scales.x.ticks.color = wwLib.getStyleFromToken(this.content.axisColor) || this.content.axisColor;
-            this.chartInstance.options.scales.y.ticks.color = wwLib.getStyleFromToken(this.content.axisColor) || this.content.axisColor;
+        'content.labelColor'() {
+            this.chartInstance.options.scales.x.ticks.color = wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor;
+            this.chartInstance.options.scales.y.ticks.color = wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor;
             this.chartInstance.update();
         },
         'content.legendSize'() {

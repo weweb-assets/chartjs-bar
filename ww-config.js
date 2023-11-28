@@ -17,7 +17,7 @@ export default {
         icon: 'logos/chartjs',
         customStylePropertiesOrder: [
             ['isLegend', 'legendPosition', 'legendAlignement', 'legendSize', 'legendColor'],
-            ['axis', 'stacked', 'startAtZero', 'axisColor', 'gridColor'],
+            ['axis', 'stacked', 'startAtZero', 'labelColor', 'gridColor'],
         ],
         customSettingsPropertiesOrder: [
             'dataType',
@@ -128,8 +128,8 @@ export default {
             classes: true,
             hidden: content => content.dataType === 'advanced' || !content.isLegend,
         },
-        axisColor: {
-            label: 'Color',
+        labelColor: {
+            label: 'Label color',
             type: 'Color',
             options: { nullable: true },
             bindable: true,
