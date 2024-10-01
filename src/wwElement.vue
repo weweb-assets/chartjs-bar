@@ -100,10 +100,8 @@ export default {
             let datasets = [];
 
             if (this.content.dataType === 'guided') {
-                let data =
-                    (!this.content.data || Array.isArray(this.content.data)
-                        ? this.content.data
-                        : this.content.data.data) || [];
+                let data = wwLib.wwUtils.getDataFromCollection(this.content.data) || [];
+                data = Array.isArray(data) ? data : [];
 
                 const yAxis = this.content.yAxis;
                 let dataXField = this.content.dataXField;
