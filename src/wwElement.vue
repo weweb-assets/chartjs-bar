@@ -73,7 +73,10 @@ export default {
                 },
                 scales: {
                     x: {
-                        grid: { color: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor, borderColor: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor },
+                        grid: {
+                            color: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor,
+                            borderColor: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor,
+                        },
                         ticks: {
                             color: wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor,
                             font: { size: parseInt(this.content.legendSize) },
@@ -81,7 +84,10 @@ export default {
                         stacked: this.content.stacked,
                     },
                     y: {
-                        grid: { color: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor, borderColor: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor },
+                        grid: {
+                            color: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor,
+                            borderColor: wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor,
+                        },
                         ticks: {
                             color: wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor,
                             font: { size: parseInt(this.content.legendSize) },
@@ -349,12 +355,15 @@ export default {
             this.chartInstance.update();
         },
         'content.legendColor'() {
-            this.chartInstance.options.plugins.legend.labels.color = wwLib.getStyleFromToken(this.content.legendColor) || this.content.legendColor;
+            this.chartInstance.options.plugins.legend.labels.color =
+                wwLib.getStyleFromToken(this.content.legendColor) || this.content.legendColor;
             this.chartInstance.update();
         },
         'content.labelColor'() {
-            this.chartInstance.options.scales.x.ticks.color = wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor;
-            this.chartInstance.options.scales.y.ticks.color = wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor;
+            this.chartInstance.options.scales.x.ticks.color =
+                wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor;
+            this.chartInstance.options.scales.y.ticks.color =
+                wwLib.getStyleFromToken(this.content.labelColor) || this.content.labelColor;
             this.chartInstance.update();
         },
         'content.legendSize'() {
@@ -364,10 +373,14 @@ export default {
             this.chartInstance.update();
         },
         'content.gridColor'() {
-            this.chartInstance.options.scales.x.grid.borderColor = wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
-            this.chartInstance.options.scales.x.grid.color = wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
-            this.chartInstance.options.scales.y.grid.borderColor = wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
-            this.chartInstance.options.scales.y.grid.color = wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
+            this.chartInstance.options.scales.x.grid.borderColor =
+                wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
+            this.chartInstance.options.scales.x.grid.color =
+                wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
+            this.chartInstance.options.scales.y.grid.borderColor =
+                wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
+            this.chartInstance.options.scales.y.grid.color =
+                wwLib.getStyleFromToken(this.content.gridColor) || this.content.gridColor;
             this.chartInstance.update();
         },
         'content.axis'() {
@@ -413,12 +426,26 @@ export default {
         this.initChart();
     },
     beforeUnmount() {
-        this.chartInstance.destroy();
+        if (this.chartInstance) {
+            this.chartInstance.destroy();
+            this.chartInstance = null;
+        }
     },
     methods: {
         initChart() {
-            const element = this.$el.querySelector('.chartjs-bar');
-            this.chartInstance = new Chart(element, this.config);
+            try {
+                if (this.chartInstance) {
+                    this.chartInstance.destroy();
+                }
+                const element = this.$el.querySelector('.chartjs-bar');
+                if (!element) {
+                    console.error('Canvas element not found');
+                    return;
+                }
+                this.chartInstance = new Chart(element, this.config);
+            } catch (error) {
+                console.error('Failed to initialize chart:', error);
+            }
         },
         aggregate(operator, data) {
             if (!data) return undefined;
