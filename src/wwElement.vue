@@ -242,18 +242,30 @@ export default {
                     }));
                 }
 
-                // Remove duplicate X values
+                // Remove duplicates based on the current axis
                 for (const dataset of datasets) {
+                    // Use the actual current axis for deduplication
+                    const axisKey = this.content.axis; // 'x' or 'y'
+                    
+                    // Properly use the current axis for deduplication
                     dataset.data = dataset.data.filter(
-                        (item, index) => dataset.data.findIndex(elem => item.x === elem.x) === index
+                        (item, index) => dataset.data.findIndex(elem => item[axisKey] === elem[axisKey]) === index
                     );
                 }
-                // Empty values
+                
+                // Empty values - Consider both axes
                 if (this.content.dataXEmpty === false) {
                     for (const dataset of datasets) {
-                        dataset.data = dataset.data.filter(item => item.y && item.x);
+                        // Check for emptiness based on both axes, not just hardcoded x and y
+                        // This ensures we retain all data points regardless of which axis is primary
+                        dataset.data = dataset.data.filter(item => {
+                            const hasX = item.x !== undefined && item.x !== null && item.x !== '';
+                            const hasY = item.y !== undefined && item.y !== null && item.y !== '';
+                            return hasX && hasY;
+                        });
                     }
                 }
+                
                 // Order by
                 if (this.content.dataOrderBy !== 'default') {
                     for (const item of datasets) {
@@ -268,9 +280,8 @@ export default {
                         item.data = item.data.map(item => ({ x: `${item.x}`, y: item.y }));
                     }
                 }
-                labels = [
-                    ...new Set(datasets.map(dataset => dataset.data.map(elem => elem[this.content.axis])).flat()),
-                ];
+                const dataAxisValues = datasets.map(dataset => dataset.data.map(elem => elem[this.content.axis])).flat();
+                labels = [...new Set(dataAxisValues)];
             } else {
                 labels = this.content.labels;
                 datasets = this.content.datasets || [];
